@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>To-Do List App</title>
+  <link rel="stylesheet" href="/static/index.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>📝 To-Do List</h1>
+
+    <form action="/add" method="post" class="task-form">
+      <input type="text" name="title" placeholder="Enter a new task..." required />
+      <button type="submit">➕ Add</button>
+    </form>
+
+    {% if tasks and tasks|length > 0 %}
+      <ul class="tasks">
+        {% for task in tasks %}
+          <li class="task {{ 'done' if task.status else '' }}">
+            <span class="title">{{ task.title }}</span>
+            <div class="actions">
+              <a class="toggle" href="/toggle/{{ task.id }}">
+                {% if task.status %}⟲ Undo{% else %}✔ Done{% endif %}
+              </a>
+              <a class="delete" href="/delete/{{ task.id }}">🗑 Delete</a>
+            </div>
+          </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p class="empty">No tasks yet. Add one above! 🚀</p>
+    {% endif %}
+  </div>
+</body>
+</html>
