@@ -11,4 +11,4 @@ class Task(TaskBase):
     status: bool
 
     class Config:
-        from_attributes = True  # Pydantic v2
+        from_attributes = True  
