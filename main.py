@@ -7,12 +7,11 @@ from sqlalchemy.orm import Session
 import models, schemas, crud
 from database import engine, get_db
 
-# Ensure DB tables exist
+
 models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 
-# Static + Templates
 app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="templates")
 
@@ -36,7 +35,6 @@ def add_task(title: str = Form(...), db: Session = Depends(get_db)):
 def delete_task(task_id: int, db: Session = Depends(get_db)):
     ok = crud.delete_task(db, task_id)
     if not ok:
-        # Not fatal for the UI; just redirect back
         return RedirectResponse("/", status_code=303)
     return RedirectResponse("/", status_code=303)
 
@@ -44,5 +42,4 @@ def delete_task(task_id: int, db: Session = Depends(get_db)):
 @app.get("/toggle/{task_id}")
 def toggle_task(task_id: int, db: Session = Depends(get_db)):
     task = crud.update_task_status(db, task_id)
-    # If not found, don’t crash the page — just redirect back
     return RedirectResponse("/", status_code=303)
